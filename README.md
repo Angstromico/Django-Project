@@ -60,6 +60,7 @@ docker-compose up -d
 Apply migrations to the PostgreSQL database:
 
 ```bash
+python -m pipenv run python project/manage.py makemigrations
 python -m pipenv run python project/manage.py migrate
 ```
 
