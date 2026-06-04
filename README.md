@@ -8,14 +8,16 @@ The main goal of this project is to provide a clean environment for learning and
 - Django Project and App structure.
 - Models, Views, and Templates.
 - Django Admin interface.
-- Database migrations with SQLite.
+- **PostgreSQL Integration via Docker.**
+- **Environment Variable Management with `django-environ`.**
 - Dependency management with Pipenv.
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 - **Python** (version 3.10 or higher recommended)
-- **Pipenv** (can be installed via pip: `pip install pipenv`)
+- **Pipenv** (`pip install pipenv`)
+- **Docker & Docker Compose**
 
 ## Getting Started
 
@@ -28,54 +30,49 @@ cd django
 
 ### 2. Install Dependencies
 
-This project uses `pipenv` to manage dependencies and virtual environments.
-
 ```bash
 pipenv install
 ```
 
-### 3. Activate the Virtual Environment
+### 3. Setup Environment Variables
+
+Copy the example environment file and update it if necessary:
 
 ```bash
-pipenv shell
+cp .env.example .env
 ```
+
+### 4. Start the Database
+
+This project uses PostgreSQL running in a Docker container.
+
+```bash
+docker-compose up -d
+```
+*Note: The database is configured to run on host port **5433** to avoid conflicts.*
 
 ---
 
 ## Running the Project
 
-Navigate to the `project` directory where `manage.py` is located:
-
-```bash
-cd project
-```
-
 ### Database Migrations
 
-Before running the server for the first time, apply the initial migrations:
+Apply migrations to the PostgreSQL database:
 
 ```bash
-python manage.py migrate
+python -m pipenv run python project/manage.py migrate
 ```
 
 ### Create a Superuser (Optional)
 
-To access the Django Admin interface, create a superuser:
-
 ```bash
-python manage.py createsuperuser
+python -m pipenv run python project/manage.py createsuperuser
 ```
 
 ### Start the Development Server
 
-#### Windows (PowerShell)
-```powershell
-python manage.py runserver
-```
-
-#### Linux / macOS (Bash)
 ```bash
-python manage.py runserver
+python -m pipenv run python project/manage.py runserver
 ```
 
 Once the server is running, you can access the project at `http://127.0.0.1:8000/`.
@@ -88,4 +85,6 @@ Once the server is running, you can access the project at `http://127.0.0.1:8000
   - `manage.py`: Django's command-line utility.
   - `project/`: Project configuration (settings, URLs, WSGI/ASGI).
   - `firstapp/`: A sample Django application.
+- `docker-compose.yml`: Docker configuration for the PostgreSQL database.
+- `.env.example`: Template for environment variables.
 - `Pipfile` & `Pipfile.lock`: Dependency management files.
