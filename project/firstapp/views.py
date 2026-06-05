@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
+from django.contrib import messages
 from .forms import ReservationForm
 
 # Create your views here.
@@ -12,11 +13,13 @@ class HelloView(View):
         return HttpResponse("Hello World Class Base")
 
 def home(request):
-    form = ReservationForm()
-    if(request.method == 'POST'):
+    if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponse("Reservation created successfully!")
+            messages.success(request, "Reservation created successfully!")
+            return redirect('home')
+    else:
+        form = ReservationForm()
     
     return render(request, 'index.html', {'form': form})
